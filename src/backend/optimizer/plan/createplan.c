@@ -4072,7 +4072,9 @@ create_mergejoin_plan(PlannerInfo *root,
 
 static HashJoin *
 create_hashjoin_plan(PlannerInfo *root,
-					 HashPath *best_path)
+					 HashPath *best_path,
+				 	Plan *outer_plan,
+			 		Plan *inner_plan)
 {
 	HashJoin   *join_plan;
 	Hash	   *hash_plan;

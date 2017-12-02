@@ -882,6 +882,10 @@ typedef struct PlanState
 	TupleTableSlot *ps_ResultTupleSlot; /* slot for my result tuples */
 	ExprContext *ps_ExprContext;	/* node's expression-evaluation context */
 	ProjectionInfo *ps_ProjInfo;	/* info for doing tuple projection */
+
+
+	TupleTableSlot *ps_OuterTupleSlot;
+	TupleTableSlot *ps_InnerTypleSlot;
 } PlanState;
 
 /* ----------------
@@ -1706,8 +1710,14 @@ typedef struct HashJoinState
 	List	   *hj_InnerHashKeys;	/* list of ExprState nodes */
 	List	   *hj_HashOperators;	/* list of operator OIDs */
 	HashJoinTable hj_HashTable;
+	HashJoinTable inner_hj_HasTable;
+	HashJointable outer_hj_HashTable;
 	uint32		hj_CurHashValue;
+	uint32 		inner_hj_CurHashValue;
+	uint32		outer_hj_CurHashValue;
 	int			hj_CurBucketNo;
+	int 		inner_hj_CurBucketNo;
+	int 		outer_hj_CurBucketNo;
 	int			hj_CurSkewBucketNo;
 	HashJoinTuple hj_CurTuple;
 	TupleTableSlot *hj_OuterTupleSlot;

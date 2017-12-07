@@ -803,7 +803,7 @@ ExecHashGetBucketAndBatch(HashJoinTable hashtable,
  * The current outer tuple must be stored in econtext->ecxt_outertuple.
  */
 HeapTuple
-ExecScanHashBucketHashJoinState *hjstate,
+ExecScanHashBucket(HashJoinState *hjstate,
 				   ExprContext *econtext)
 {
 	List	   *hjclauses = hjstate->hashclauses;

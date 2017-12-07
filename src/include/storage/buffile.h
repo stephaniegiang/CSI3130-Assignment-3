@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------
  *
  * buffile.h
- *	  Management of large buffered temporary files.
+ *	  Management of large buffered files, primarily temporary files.
  *
  * The BufFile routines provide a partial replacement for stdio atop
  * virtual file descriptors managed by fd.c.  Currently they only support
@@ -15,18 +15,16 @@
  * but currently we have no need for oversize temp files without buffered
  * access.
  *
- * Portions Copyright (c) 1996-2017, PostgreSQL Global Development Group
+ * Portions Copyright (c) 1996-2005, PostgreSQL Global Development Group
  * Portions Copyright (c) 1994, Regents of the University of California
  *
- * src/include/storage/buffile.h
+ * $PostgreSQL: pgsql/src/include/storage/buffile.h,v 1.18 2004/12/31 22:03:42 pgsql Exp $
  *
  *-------------------------------------------------------------------------
  */
 
 #ifndef BUFFILE_H
 #define BUFFILE_H
-
-#include "storage/sharedfileset.h"
 
 /* BufFile is an opaque type whose details are not known outside buffile.c. */
 
@@ -40,13 +38,8 @@ extern BufFile *BufFileCreateTemp(bool interXact);
 extern void BufFileClose(BufFile *file);
 extern size_t BufFileRead(BufFile *file, void *ptr, size_t size);
 extern size_t BufFileWrite(BufFile *file, void *ptr, size_t size);
-extern int	BufFileSeek(BufFile *file, int fileno, off_t offset, int whence);
-extern void BufFileTell(BufFile *file, int *fileno, off_t *offset);
+extern int	BufFileSeek(BufFile *file, int fileno, long offset, int whence);
+extern void BufFileTell(BufFile *file, int *fileno, long *offset);
 extern int	BufFileSeekBlock(BufFile *file, long blknum);
 
-extern BufFile *BufFileCreateShared(SharedFileSet *fileset, const char *name);
-extern void BufFileExportShared(BufFile *file);
-extern BufFile *BufFileOpenShared(SharedFileSet *fileset, const char *name);
-extern void BufFileDeleteShared(SharedFileSet *fileset, const char *name);
-
-#endif							/* BUFFILE_H */
+#endif   /* BUFFILE_H */

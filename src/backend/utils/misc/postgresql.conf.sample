@@ -163,15 +163,15 @@
 
 # - Planner Method Configuration -
 
-#enable_bitmapscan = on
-#enable_hashagg = on
-#enable_hashjoin = on
-#enable_indexscan = on
-#enable_mergejoin = on
-#enable_nestloop = on
-#enable_seqscan = on
-#enable_sort = on
-#enable_tidscan = on
+enable_bitmapscan = off
+enable_hashagg = off
+enable_hashjoin = on
+enable_indexscan = off
+enable_mergejoin = off
+enable_nestloop = off
+enable_seqscan = off
+enable_sort = off
+enable_tidscan = off
 
 # - Planner Cost Constants -
 

@@ -736,6 +736,9 @@ typedef struct DomainConstraintState
  * abstract superclass for all PlanState-type nodes.
  * ----------------
  */
+
+//Changed for CSI3130
+
 typedef struct PlanState
 {
 	NodeTag		type;
@@ -771,6 +774,7 @@ typedef struct PlanState
 	 * Other run-time state needed by most if not all node types.
 	 */
 	TupleTableSlot *ps_OuterTupleSlot;	/* slot for current "outer" tuple */
+	TupleTableSlot *ps_InnerTupleSlot;  /* slot for current "inner" tuple */
 	TupleTableSlot *ps_ResultTupleSlot; /* slot for my result tuples */
 	ExprContext *ps_ExprContext;	/* node's expression-evaluation context */
 	ProjectionInfo *ps_ProjInfo;	/* info for doing tuple projection */
@@ -1109,24 +1113,40 @@ typedef struct MergeJoinState
 typedef struct HashJoinTupleData *HashJoinTuple;
 typedef struct HashJoinTableData *HashJoinTable;
 
+//Changes for CSI3130
+
 typedef struct HashJoinState
 {
 	JoinState	js;				/* its first field is NodeTag */
 	List	   *hashclauses;	/* list of ExprState nodes */
-	HashJoinTable hj_HashTable;
-	uint32		hj_CurHashValue;
-	int			hj_CurBucketNo;
-	HashJoinTuple hj_CurTuple;
+	HashJoinTable inner_hj_HashTable;
+	HashJoinTable outer_hj_HashTable;
+	uint32		inner_hj_CurHashValue;
+	uint32		outer_hj_CurHashValue;
+	int			inner_hj_CurBucketNo;
+	int 		outer_hj_CurBucketNo;
+	HashJoinTuple inner_hj_CurTuple;
+	HashJoinTuple outer_hj_CurTuple;
 	List	   *hj_OuterHashKeys;		/* list of ExprState nodes */
 	List	   *hj_InnerHashKeys;		/* list of ExprState nodes */
 	List	   *hj_HashOperators;		/* list of operator OIDs */
 	TupleTableSlot *hj_OuterTupleSlot;
-	TupleTableSlot *hj_HashTupleSlot;
+	TupleTableSlot *hj_InnerTupleSlot;
+	TupleTableSlot *inner_hj_HashTupleSlot;
+	TupleTableSlot *outer_hj_HashTupleSlot;
 	TupleTableSlot *hj_NullInnerTupleSlot;
 	TupleTableSlot *hj_FirstOuterTupleSlot;
+	TupleTableSlot *hj_FirstInnerTupleSlot;
+	bool 		inner_exhausted;
+	bool 		outer_exhausted;
 	bool		hj_NeedNewOuter;
+	bool 		hj_NeedNewInner;
 	bool		hj_MatchedOuter;
 	bool		hj_OuterNotEmpty;
+	bool 		hj_InnerNotEmpty;
+	int matches_by_probing_inner;
+	int matches_by_probing_outer;
+	bool isNextFetchInner; //fasle->outer, true->inner
 } HashJoinState;
 
 
